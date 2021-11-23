@@ -1,0 +1,14 @@
+{
+    "editor.formatOnSave": true,
+    "deno.enable": true,
+    "deno.lint": true,
+    "deno.unstable": false,
+    "deno.config": "./deno.client.json",
+    "prettier.singleQuote": true,
+    "prettier.tabWidth": 4,
+    "prettier.trailingComma": "es5",
+    "prettier.printWidth": 110,
+    "deno.suggest.imports.hosts": {
+        "https://deno.land": true
+    }
+}
