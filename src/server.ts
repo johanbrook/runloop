@@ -1,6 +1,7 @@
-import { serve, serveFile, serveTls } from 'https://deno.land/std@0.115.1/http/mod.ts';
+import { serve, serveTls } from 'https://deno.land/std@0.115.1/http/mod.ts';
 import { basename, extname } from 'https://deno.land/std@0.115.1/path/mod.ts';
 import { Status } from 'https://deno.land/std@0.115.1/http/http_status.ts';
+import { serveFile } from 'https://deno.land/std@0.115.1/http/file_server.ts';
 
 const addr = ':3000';
 const BUILD_ROOT = './build';
