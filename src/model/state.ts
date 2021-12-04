@@ -13,7 +13,7 @@ export interface State {
 /** Persisted in storage. */
 export interface AppConf {
     currentRun?: Run;
-    runs: Run[];
+    runs: { [id: number]: Run };
     latestRunNo: number;
 }
 
@@ -63,7 +63,6 @@ export const positionHasChanged = (run: Run, coords: Coords): boolean => {
     return !coordsAreEqual(last.coords, coords);
 };
 
-export const findRunById = (state: State, id: number): Run | undefined =>
-    state.appConf.runs.find((r) => r.id == id);
+export const findRunById = (state: State, id: number): Run | undefined => state.appConf.runs[id];
 
 const COORD_TOLERANCE = 0.00001;

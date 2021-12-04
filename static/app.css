@@ -57,6 +57,7 @@ h6 {
     background-color: var(--btn-bg);
     text-decoration: none;
     color: #fff;
+    cursor: pointer;
 }
 
 .btn[disabled] {

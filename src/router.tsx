@@ -5,6 +5,7 @@ import { Params, path, Pathname } from './lib/paths.ts';
 export const routes = {
     runs: path('/'),
     newRun: path('/runs/new'),
+    currentRun: path('/runs/current'),
     viewRun: path('/runs/:id'),
 };
 
@@ -18,21 +19,15 @@ export type RouteName = keyof typeof routes;
 type RouterFn = (callback: In, navigator: Navigator) => Router;
 
 type In = (route: Route<RouteName>) => void;
-type Out = Navigate;
 
 interface Router {
-    out: (out: Out) => void;
     start: () => Stop;
+    navigate: (to: Pathname, replace?: boolean) => void;
+    redirect: (to: Pathname) => void;
 }
 
-interface Navigate {
-    kind: 'navigate';
-    pathname: Pathname;
-    replace?: boolean;
-}
-
-interface Navigator {
-    (pathname: string, replace?: boolean): void;
+export interface Navigator {
+    (pathname: string, replace?: boolean, redirect?: boolean): void;
 }
 
 type Stop = () => void;
@@ -44,25 +39,21 @@ const mkRouter: RouterFn = (callback, navigator) => {
         if (route) callback(route);
     };
 
-    const navigate = (pathname: string, replace = false) => {
-        navigator(pathname, replace);
-    };
-
     const router: Router = {
-        out: (out) => {
-            switch (out.kind) {
-                case 'navigate':
-                    navigate(out.pathname, out.replace);
-                    break;
-            }
-        },
-
         start: () => {
             events.forEach((ev) => addEventListener(ev, check));
 
-            // check();
+            check();
 
             return () => events.forEach((ev) => removeEventListener(ev, check));
+        },
+
+        navigate: (pathname, replace = false) => {
+            navigator(pathname, replace);
+        },
+
+        redirect: (pathname) => {
+            navigator(pathname, true, true);
         },
     };
 
@@ -84,18 +75,11 @@ const getMatchingRoute = (url: URL): Route<RouteName> | null => {
     return null;
 };
 
-export const browserNavigator: Navigator = (pathname, replace) => {
-    window.history[replace ? 'replaceState' : 'pushState'](null, '', pathname);
-};
-
-export const serverNavigator: Navigator = () => {
-    // noop
-};
-
 // Components
 
 interface RouterCtx {
     navigate: (to: Pathname, replace?: boolean) => void;
+    redirect: (to: Pathname) => void;
 }
 
 const RouterContext = createContext<RouterCtx>(null!);
@@ -120,13 +104,8 @@ export const Router = ({ initialUrl, children, navigator }: RouterProps) => {
     }, []);
 
     const ctx: RouterCtx = {
-        navigate: (to, replace = false) => {
-            router.out({
-                kind: 'navigate',
-                pathname: to,
-                replace,
-            });
-        },
+        navigate: router.navigate,
+        redirect: router.redirect,
     };
 
     return <RouterContext.Provider value={ctx} children={route ? children(route) : null} />;

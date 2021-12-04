@@ -1,4 +1,4 @@
-import { Err, INITIAL_STATE, State, GeoUpdate, AppState, Run, Coords, AppConf } from './state.ts';
+import { Err, INITIAL_STATE, State, GeoUpdate, Run, Coords, AppConf } from './state.ts';
 import { useCallback, useReducer, Reducer } from 'preact/hooks';
 
 interface StartRun {
@@ -7,6 +7,7 @@ interface StartRun {
 
 interface FinishRun {
     kind: 'finish_run';
+    id: number;
 }
 
 interface GeoUpdateMsg {
@@ -30,24 +31,28 @@ const STORAGE_KEY = 'runloop_v1';
 
 const reducer: Reducer<State, Action> = (prev, action): State => {
     switch (action.kind) {
-        case 'start_run':
+        case 'start_run': {
+            const id = prev.appConf.latestRunNo + 1;
+
             return {
                 ...prev,
                 appConf: {
                     ...prev.appConf,
+                    latestRunNo: id,
                     currentRun: {
-                        id: prev.appConf.latestRunNo + 1,
+                        id,
                         startedAt: Date.now(),
                         geoUpdates: [],
                     },
-                    latestRunNo: prev.appConf.latestRunNo + 1,
                 },
             };
+        }
 
-        case 'geo_update_msg':
-            // Invariant: needs currentRun
-            if (!prev.appConf.currentRun) {
-                throw new Error('Invariant fail: state.appConf.currentRun not set');
+        case 'geo_update_msg': {
+            const { currentRun } = prev.appConf;
+
+            if (!currentRun) {
+                throw new Error(`Invariant: No currentRun when receiving ${action.kind}`);
             }
 
             return {
@@ -56,20 +61,22 @@ const reducer: Reducer<State, Action> = (prev, action): State => {
                 appConf: {
                     ...prev.appConf,
                     currentRun: {
-                        ...prev.appConf.currentRun,
-                        geoUpdates: [...prev.appConf.currentRun.geoUpdates, action.update],
+                        ...currentRun,
+                        geoUpdates: [...currentRun.geoUpdates, action.update],
                     },
                 },
             };
+        }
 
         case 'finish_run': {
-            // Invariant: needs currentRun
-            if (!prev.appConf.currentRun) {
-                throw new Error('Invariant fail: state.currentRun not set');
+            const { currentRun } = prev.appConf;
+
+            if (!currentRun) {
+                throw new Error(`Invariant: No currentRun when receiving ${action.kind}`);
             }
 
             const finishedRun: Run = {
-                ...prev.appConf.currentRun,
+                ...currentRun,
                 finishedAt: Date.now(),
             };
 
@@ -78,8 +85,10 @@ const reducer: Reducer<State, Action> = (prev, action): State => {
                 appConf: {
                     ...prev.appConf,
                     currentRun: undefined,
-                    // keep the array sorted latest first
-                    runs: [finishedRun, ...prev.appConf.runs],
+                    runs: {
+                        [action.id]: finishedRun,
+                        ...prev.appConf.runs,
+                    },
                 },
             };
         }
@@ -90,16 +99,18 @@ const reducer: Reducer<State, Action> = (prev, action): State => {
                 currentCoords: action.coords,
             };
 
-        case 'delete_run':
+        case 'delete_run': {
+            const runs = { ...prev.appConf.runs };
+            delete runs[action.id];
+
             return {
                 ...prev,
                 appConf: {
                     ...prev.appConf,
-                    currentRun:
-                        action.id == prev.appConf.currentRun?.id ? undefined : prev.appConf.currentRun,
-                    runs: prev.appConf.runs.filter((r) => r.id != action.id),
+                    runs,
                 },
             };
+        }
 
         case 'err':
             return {
@@ -109,49 +120,18 @@ const reducer: Reducer<State, Action> = (prev, action): State => {
     }
 };
 
-const derived = (prev: State): Partial<State> => {
-    const derivedAppState = ((): AppState => {
-        // if (prev.wantNewRun && !prev.appConf.currentRun) {
-        //     return AppState.NewRun;
-        // }
-        // if (prev.selectedRun) {
-        //     return AppState.ViewRun;
-        // }
-        // if (prev.appConf.currentRun) {
-        //     return AppState.Running;
-        // } else if (!prev.appConf.currentRun) {
-        //     return AppState.Begin;
-        // }
-
-        return prev.appState;
-    })();
-
-    return { appState: derivedAppState };
-};
-
 const pack = (s: State) => s.appConf;
-const unpack = (s: State, appConf: AppConf): State => {
-    const unpackedState = {
-        ...s,
-        appConf,
-    };
+const unpack = (s: State, appConf: AppConf): State => ({
+    ...s,
+    appConf,
+});
 
-    return {
-        ...unpackedState,
-        ...derived(unpackedState),
-    };
-};
-
-export const usePersistReducer = () => {
+export const useModel = (): [State, (a: Action) => void] => {
     const reducerLocalStorage = useCallback(
         (state: State, action: Action) => {
             console.log('action', action);
 
-            const reducerState = reducer(state, action);
-            const newState = {
-                ...reducerState,
-                ...derived(reducerState),
-            };
+            const newState = reducer(state, action);
 
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(pack(newState)));
@@ -166,7 +146,9 @@ export const usePersistReducer = () => {
         [STORAGE_KEY]
     );
 
-    return useReducer(reducerLocalStorage, INITIAL_STATE, initializer);
+    const [state, dispatch] = useReducer(reducerLocalStorage, INITIAL_STATE, initializer);
+
+    return [state, dispatch];
 };
 
 const initializer = (initial: State): State => {

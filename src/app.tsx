@@ -1,12 +1,12 @@
 import { h } from 'preact';
-import { useState, useEffect } from 'preact/hooks';
+import { useEffect, useLayoutEffect } from 'preact/hooks';
 import { NewRun } from './components/NewRun.tsx';
 import { CurrentRun } from './components/CurrentRun.tsx';
 import { Runs } from './components/Runs.tsx';
 import { ViewRun } from './components/ViewRun.tsx';
-import { Action, usePersistReducer } from './model/reducer.ts';
+import { Action, useModel } from './model/reducer.ts';
 import { AppState, findRunById, State } from './model/state.ts';
-import { Route, RouteName, routes } from './router.tsx';
+import { Route, RouteName, routes, useRouter } from './router.tsx';
 import { Link } from './components/Link.tsx';
 import { useHasMounted } from './lib/has-mounted.ts';
 
@@ -15,11 +15,18 @@ interface Props {
 }
 
 export const App = ({ route }: Props) => {
-    const [state, dispatch] = usePersistReducer();
+    const [state, dispatch] = useModel();
+    const { navigate } = useRouter();
 
     // leak state for easy console debugging
     (window as AppWindow).state = state;
     (window as AppWindow).dispatch = dispatch;
+
+    useEffect(() => {
+        if (state.appConf.currentRun) {
+            navigate(routes.currentRun({}));
+        }
+    }, [state.appConf.currentRun]);
 
     if (state.appState == AppState.Failed) {
         return (
@@ -35,7 +42,7 @@ export const App = ({ route }: Props) => {
             {(() => {
                 switch (route.name) {
                     case 'viewRun':
-                        return <ViewRunRoute state={state} dispatch={dispatch} route={route} />;
+                        return <ViewRunPage state={state} dispatch={dispatch} route={route} />;
 
                     case 'runs':
                         return (
@@ -43,7 +50,7 @@ export const App = ({ route }: Props) => {
                                 <Link to={routes.newRun({})} class="btn">
                                     New run
                                 </Link>
-                                <Runs runs={state.appConf.runs} />
+                                <Runs runs={Object.values(state.appConf.runs)} />
                             </section>
                         );
 
@@ -65,21 +72,22 @@ export const App = ({ route }: Props) => {
                                 }
                             />
                         );
+
+                    case 'currentRun':
+                        return <CurrentRunPage state={state} dispatch={dispatch} route={route} />;
                 }
             })()}
         </main>
     );
 };
 
-const ViewRunRoute = ({
-    state,
-    dispatch,
-    route,
-}: {
+interface PageProps {
     state: State;
     dispatch: (a: Action) => void;
     route: Route<RouteName>;
-}) => {
+}
+
+const ViewRunPage = ({ state, dispatch, route }: PageProps) => {
     const hasMounted = useHasMounted();
 
     if (!hasMounted) {
@@ -100,7 +108,42 @@ const ViewRunRoute = ({
         );
     }
 
-    return !run.finishedAt ? (
+    return (
+        <ViewRun
+            run={run}
+            onDelete={(run) =>
+                dispatch({
+                    kind: 'delete_run',
+                    id: run.id,
+                })
+            }
+        />
+    );
+};
+
+const CurrentRunPage = ({ state, dispatch, route }: PageProps) => {
+    const hasMounted = useHasMounted();
+    const { redirect } = useRouter();
+
+    if (!hasMounted) {
+        return (
+            <section>
+                <h1>Run {route.params.id}</h1>
+            </section>
+        );
+    }
+
+    const run = state.appConf.currentRun;
+
+    if (!run) {
+        return (
+            <section>
+                <h1>No active run</h1>
+            </section>
+        );
+    }
+
+    return (
         <CurrentRun
             currentRun={run}
             onError={(err) => dispatch(err)}
@@ -113,18 +156,10 @@ const ViewRunRoute = ({
             onFinishRun={() => {
                 dispatch({
                     kind: 'finish_run',
-                });
-            }}
-        />
-    ) : (
-        <ViewRun
-            run={run}
-            onDelete={(run) =>
-                dispatch({
-                    kind: 'delete_run',
                     id: run.id,
-                })
-            }
+                });
+                redirect(routes.viewRun({ id: run.id.toString() }));
+            }}
         />
     );
 };

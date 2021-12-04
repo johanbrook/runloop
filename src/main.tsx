@@ -2,7 +2,7 @@ import { Application, Router, send } from 'oak';
 import { App } from './App.tsx';
 import { getConfig, mkClientConfig, BROWSER_WINDOW_ENV_KEY } from './config.ts';
 import { renderToString } from 'preact-render-to-string';
-import { Router as AppRouter, serverNavigator } from './router.tsx';
+import { Router as AppRouter, Navigator } from './router.tsx';
 
 const { files } = await Deno.emit('./src/run-app.tsx', {
     bundle: 'module',
@@ -15,12 +15,6 @@ const { files } = await Deno.emit('./src/run-app.tsx', {
     },
     importMapPath: './import-map.json',
 });
-
-const RoutedApp = ({ url }: { url: URL }) => (
-    <AppRouter initialUrl={url} navigator={serverNavigator}>
-        {(route) => <App route={route} />}
-    </AppRouter>
-);
 
 const mkServer = (): Application => {
     const server = new Application();
@@ -74,8 +68,16 @@ const mkServer = (): Application => {
     server.use((ctx) => {
         const url = new URL(ctx.request.url);
 
+        const navigator: Navigator = (pathname, replace, redirect) => {
+            if (redirect) {
+                ctx.response.redirect(pathname);
+            }
+        };
+
         const app = renderToString(
-            <RoutedApp url={url} />,
+            <AppRouter initialUrl={url} navigator={navigator}>
+                {(route) => <App route={route} />}
+            </AppRouter>,
             {},
             {
                 pretty: true,
