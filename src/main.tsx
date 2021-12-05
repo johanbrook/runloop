@@ -1,6 +1,6 @@
 import { Application, Router, send, renderToString } from './deps.ts';
 import { App } from './App.tsx';
-import { getConfig, mkClientConfig, BROWSER_WINDOW_ENV_KEY } from './config.ts';
+import { getConfig, mkConfig, BROWSER_WINDOW_ENV_KEY, Flag } from './config.ts';
 import { Router as AppRouter, Navigator } from './router.tsx';
 
 const { files } = await Deno.emit('./src/run-app.tsx', {
@@ -18,7 +18,7 @@ const mkServer = (): Application => {
     const server = new Application();
     const router = new Router();
 
-    const clientConf = mkClientConfig();
+    const clientConf = mkConfig(Flag.Client);
 
     const html = (app: string) => /* html */ `
 <!DOCTYPE html>

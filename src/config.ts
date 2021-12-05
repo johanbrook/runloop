@@ -1,13 +1,16 @@
 type Config = Record<string, string>;
 type ConfigSpec = Record<string, Flag>;
 
-enum Flag {
-    Server = 0,
-    Client = 1,
+export enum Flag {
+    /** Visible on server. */
+    Server = 1,
+    /** Visible on client. */
+    Client = 2,
 }
 
 const config: ConfigSpec = {
     USE_TLS: Flag.Server,
+    USE_EMIT: Flag.Server,
     PORT: Flag.Server,
     ENV: Flag.Server | Flag.Client,
     MAPBOX_TOKEN: Flag.Server | Flag.Client,
@@ -26,11 +29,11 @@ export const getConfig = (key: string, def?: string): string => {
     return val;
 };
 
-export const mkClientConfig = (): Record<string, string> => {
+export const mkConfig = (flag: Flag): Record<string, string> => {
     const ret: Record<string, string> = {};
 
     for (const [key, val] of Object.entries(config)) {
-        if (val >= Flag.Client) {
+        if ((val & flag) != 0) {
             const envVar = Deno.env.get(key);
 
             if (envVar) ret[key] = envVar;
