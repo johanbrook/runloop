@@ -9,10 +9,16 @@ export enum Flag {
 }
 
 const config: ConfigSpec = {
+    /** Spins up a https server instead of http. Useful in dev in order for Geolocation API to work. */
     USE_TLS: Flag.Server,
+    /** Use `Deno.emit` (currently unstable) for emitting the client bundle on app boot,
+     * instead of pre-bundling it. */
     USE_EMIT: Flag.Server,
+    /** The HTTP port to listen to. */
     PORT: Flag.Server,
+    /** The environment. */
     ENV: Flag.Server | Flag.Client,
+    /** Mapbox access token. */
     MAPBOX_TOKEN: Flag.Server | Flag.Client,
 };
 
