@@ -2,6 +2,6 @@
     "compilerOptions": {
         "lib": ["dom", "dom.iterable", "dom.asynciterable", "deno.ns", "deno.unstable"],
         "jsx": "react-jsx",
-        "jsxImportSource": "preact"
+        "jsxImportSource": "https://esm.sh/preact@10.6.1"
     }
 }
