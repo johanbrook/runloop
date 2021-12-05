@@ -1,5 +1,5 @@
+import { length } from '../deps.ts';
 import { Coords, Err } from '../model/state.ts';
-import length from 'turf-length';
 import { pad } from './dates.ts';
 
 export const startWatchPosition = (

@@ -1,4 +1,4 @@
-import { h, ComponentChildren } from 'preact';
+import { h, ComponentChildren } from '../deps.ts';
 import { Pathname } from '../lib/paths.ts';
 import { useRouter } from '../router.tsx';
 

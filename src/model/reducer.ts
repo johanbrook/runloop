@@ -1,5 +1,5 @@
+import { useCallback, useReducer, Reducer } from '../deps.ts';
 import { Err, INITIAL_STATE, State, GeoUpdate, Run, Coords, AppConf } from './state.ts';
-import { useCallback, useReducer, Reducer } from 'preact/hooks';
 
 interface StartRun {
     kind: 'start_run';

@@ -1,5 +1,4 @@
-import { h } from 'preact';
-import { useEffect, useLayoutEffect } from 'preact/hooks';
+import { h, useEffect } from './deps.ts';
 import { NewRun } from './components/NewRun.tsx';
 import { CurrentRun } from './components/CurrentRun.tsx';
 import { Runs } from './components/Runs.tsx';

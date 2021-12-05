@@ -1,6 +1,5 @@
-import { h } from 'preact';
+import { h, useEffect } from '../deps.ts';
 import { Coords, Err } from '../model/state.ts';
-import { useEffect } from 'preact/hooks';
 import { getCurrentPosition } from '../lib/geo.ts';
 import { Map } from './Map.tsx';
 import { Link } from './Link.tsx';

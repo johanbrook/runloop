@@ -1,7 +1,6 @@
-import { Application, Router, send } from 'oak';
+import { Application, Router, send, renderToString } from './deps.ts';
 import { App } from './App.tsx';
 import { getConfig, mkClientConfig, BROWSER_WINDOW_ENV_KEY } from './config.ts';
-import { renderToString } from 'preact-render-to-string';
 import { Router as AppRouter, Navigator } from './router.tsx';
 
 const { files } = await Deno.emit('./src/run-app.tsx', {

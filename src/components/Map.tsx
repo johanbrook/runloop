@@ -1,7 +1,5 @@
-import { h } from 'preact';
-import Mapbox from 'mapboxgl';
+import { h, useEffect, useRef, Mapbox } from '../deps.ts';
 import { getConfig } from '../config.ts';
-import { useEffect, useRef } from 'preact/hooks';
 import { Coords } from '../model/state.ts';
 import { coordsToGeoJSON } from '../lib/geo.ts';
 

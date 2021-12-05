@@ -1,5 +1,4 @@
-import { h, VNode, createContext } from 'preact';
-import { useEffect, useMemo, useState, useContext } from 'preact/hooks';
+import { h, VNode, createContext, useEffect, useMemo, useState, useContext } from './deps.ts';
 import { Params, path, Pathname } from './lib/paths.ts';
 
 export const routes = {

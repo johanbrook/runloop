@@ -1,4 +1,4 @@
-import { hydrate, h } from 'preact';
+import { hydrate, h } from './deps.ts';
 import { App } from './App.tsx';
 import { Router, Navigator } from './router.tsx';
 

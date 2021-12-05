@@ -1,4 +1,4 @@
-import { h } from 'preact';
+import { h } from '../deps.ts';
 import { formatDuration, formatRange, formatDate } from '../lib/dates.ts';
 import { distanceOf, paceOf, formatDistance } from '../lib/geo.ts';
 import { Run } from '../model/state.ts';
