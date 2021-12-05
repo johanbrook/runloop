@@ -12,7 +12,6 @@ const { files } = await Deno.emit('./src/run-app.tsx', {
         module: 'es2015',
         lib: ['dom', 'dom.iterable'],
     },
-    importMapPath: './import-map.json',
 });
 
 const mkServer = (): Application => {
