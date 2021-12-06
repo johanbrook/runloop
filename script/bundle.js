@@ -5,6 +5,9 @@ const ENTRYPOINT = 'src/run-app.tsx';
 const BUNDLE = 'build/app.bundle.js';
 
 const minify = !!process.env.MINIFY;
+const env = process.env.ENV || 'development';
+
+if (process.env.NODE_ENV !== env) process.env.NODE_ENV = env;
 
 export const buildOpts = {
     entryPoints: [ENTRYPOINT],
