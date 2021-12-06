@@ -1,4 +1,4 @@
-import { useState, useEffect } from '../deps.ts';
+import { useState, useEffect } from '../deps';
 
 export const useHasMounted = () => {
     const [hasMounted, setHasMounted] = useState<boolean>(false);

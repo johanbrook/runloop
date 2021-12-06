@@ -1,6 +1,6 @@
-import { hydrate, h } from './deps.ts';
-import { App } from './App.tsx';
-import { Router, Navigator } from './router.tsx';
+import { hydrate, h } from './deps';
+import { App } from './App';
+import { Router, Navigator } from './router';
 
 const navigator: Navigator = (pathname, replace = false, redirect = false) => {
     window.history[replace || redirect ? 'replaceState' : 'pushState'](null, '', pathname);

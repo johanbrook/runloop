@@ -1,6 +1,6 @@
-import { h, ComponentChildren } from '../deps.ts';
-import { Pathname } from '../lib/paths.ts';
-import { useRouter } from '../router.tsx';
+import { h, ComponentChildren } from '../deps';
+import { Pathname } from '../lib/paths';
+import { useRouter } from '../router';
 
 interface Props {
     to: Pathname;

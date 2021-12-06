@@ -1,16 +1,24 @@
-## runloop
+# runloop
 
-## Dev
+## Workflows
+
+### Development
 
 ```bash
-$ USE_TLS=1 deno run -c deno.jsonc -A --unstable --watch src/main.tsx
+brew install mkcert
+mkcert -install
+mkcert localhost
+npm install
+npm start
 ```
 
-## Config
+Visit `https://localhost:3000`.
 
-### `USE_TLS`
+### Production
 
-Optional. A truthy value will start a local HTTPS server. Useful for dev, as the Geolocation API won't work in insecure contexts, which is totally :eyeroll:
+TBD.
+
+## Runtime config
 
 ### `PORT`
 
@@ -23,3 +31,13 @@ Optional. Defaults to `development`.
 ### `MAPBOX_TOKEN`
 
 Required. Generate a personal access token over at [Mapbox](http://mapbox.com). Used for rendering inline maps and using the API.
+
+## Build config
+
+### `MINIFY`
+
+Defaults to `false`. If truthy, the JS bundle will be minified.
+
+### `USE_TLS`
+
+Optional. A truthy value will start a local HTTPS server. Useful for dev, as the Geolocation API won't work in insecure contexts, which is totally :eyeroll:

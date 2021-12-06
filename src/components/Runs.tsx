@@ -1,10 +1,10 @@
-import { h, Fragment } from '../deps.ts';
-import { formatDate, formatDuration, formatRange } from '../lib/dates.ts';
-import { Run } from '../model/state.ts';
-import { formatDistance, distanceOf, paceOf } from '../lib/geo.ts';
-import { Link } from './Link.tsx';
-import { routes } from '../router.tsx';
-import { useHasMounted } from '../lib/has-mounted.ts';
+import { h, Fragment } from '../deps';
+import { formatDate, formatDuration, formatRange } from '../lib/dates';
+import { Run } from '../model/state';
+import { formatDistance, distanceOf, paceOf } from '../lib/geo';
+import { Link } from './Link';
+import { routes } from '../router';
+import { useHasMounted } from '../lib/has-mounted';
 
 interface Props {
     runs: Run[];

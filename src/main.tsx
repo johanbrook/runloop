@@ -1,9 +1,9 @@
-import { Application, Router, send, renderToString } from './deps.ts';
-import { App } from './App.tsx';
-import { getConfig, mkConfig, BROWSER_WINDOW_ENV_KEY, Flag } from './config.ts';
-import { Router as AppRouter, Navigator } from './router.tsx';
+import { Application, Router, send, renderToString } from './deps';
+import { App } from './App';
+import { getConfig, mkConfig, BROWSER_WINDOW_ENV_KEY, Flag } from './config';
+import { Router as AppRouter, Navigator } from './router';
 
-const { files } = await Deno.emit('./src/run-app.tsx', {
+const { files } = await Deno.emit('./src/run-app', {
     bundle: 'module',
     compilerOptions: {
         jsxFactory: 'h',

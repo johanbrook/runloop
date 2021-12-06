@@ -1,9 +1,9 @@
-import { h, useEffect } from '../deps.ts';
-import { Coords, Err } from '../model/state.ts';
-import { getCurrentPosition } from '../lib/geo.ts';
-import { Map } from './Map.tsx';
-import { Link } from './Link.tsx';
-import { routes } from '../router.tsx';
+import { h, useEffect } from '../deps';
+import { Coords, Err } from '../model/state';
+import { getCurrentPosition } from '../lib/geo';
+import { Map } from './Map';
+import { Link } from './Link';
+import { routes } from '../router';
 
 interface Props {
     onStartRun: () => void;

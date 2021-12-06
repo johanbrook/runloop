@@ -1,10 +1,10 @@
-import { h } from '../deps.ts';
-import { formatDuration, formatRange, formatDate } from '../lib/dates.ts';
-import { distanceOf, paceOf, formatDistance } from '../lib/geo.ts';
-import { Run } from '../model/state.ts';
-import { routes } from '../router.tsx';
-import { Link } from './Link.tsx';
-import { Map } from './Map.tsx';
+import { h } from '../deps';
+import { formatDuration, formatRange, formatDate } from '../lib/dates';
+import { distanceOf, paceOf, formatDistance } from '../lib/geo';
+import { Run } from '../model/state';
+import { routes } from '../router';
+import { Link } from './Link';
+import { Map } from './Map';
 
 interface Props {
     run: Run;

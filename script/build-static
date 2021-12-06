@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+mkdir -p build && \
+    cp static/* build && \
+    ./script/inline-config.js

@@ -1,8 +1,8 @@
-import { h } from '../deps.ts';
-import { useEffect, useState } from '../deps.ts';
-import { formatTime, formatDuration } from '../lib/dates.ts';
-import { startWatchPosition } from '../lib/geo.ts';
-import { Coords, positionHasChanged, Err, GeoUpdate, Run } from '../model/state.ts';
+import { h } from '../deps';
+import { useEffect, useState } from '../deps';
+import { formatTime, formatDuration } from '../lib/dates';
+import { startWatchPosition } from '../lib/geo';
+import { Coords, positionHasChanged, Err, GeoUpdate, Run } from '../model/state';
 
 interface Props {
     currentRun: Run;

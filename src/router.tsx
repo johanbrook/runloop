@@ -1,5 +1,5 @@
-import { h, VNode, createContext, useEffect, useMemo, useState, useContext } from './deps.ts';
-import { Params, path, Pathname } from './lib/paths.ts';
+import { h, VNode, createContext, useEffect, useMemo, useState, useContext } from './deps';
+import { Params, path, Pathname } from './lib/paths';
 
 export const routes = {
     runs: path('/'),

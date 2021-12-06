@@ -1,13 +1,13 @@
-import { h, useEffect } from './deps.ts';
-import { NewRun } from './components/NewRun.tsx';
-import { CurrentRun } from './components/CurrentRun.tsx';
-import { Runs } from './components/Runs.tsx';
-import { ViewRun } from './components/ViewRun.tsx';
-import { Action, useModel } from './model/reducer.ts';
-import { AppState, findRunById, State } from './model/state.ts';
-import { Route, RouteName, routes, useRouter } from './router.tsx';
-import { Link } from './components/Link.tsx';
-import { useHasMounted } from './lib/has-mounted.ts';
+import { h, useEffect } from './deps';
+import { NewRun } from './components/NewRun';
+import { CurrentRun } from './components/CurrentRun';
+import { Runs } from './components/Runs';
+import { ViewRun } from './components/ViewRun';
+import { Action, useModel } from './model/reducer';
+import { AppState, findRunById, State } from './model/state';
+import { Route, RouteName, routes, useRouter } from './router';
+import { Link } from './components/Link';
+import { useHasMounted } from './lib/has-mounted';
 
 interface Props {
     route: Route<RouteName>;

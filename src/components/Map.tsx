@@ -1,7 +1,7 @@
-import { h, useEffect, useRef, Mapbox } from '../deps.ts';
-import { getConfig } from '../config.ts';
-import { Coords } from '../model/state.ts';
-import { coordsToGeoJSON } from '../lib/geo.ts';
+import { h, useEffect, useRef, Mapbox } from '../deps';
+import { getConfig } from '../config';
+import { Coords } from '../model/state';
+import { coordsToGeoJSON } from '../lib/geo';
 
 Mapbox.accessToken = getConfig('MAPBOX_TOKEN');
 

@@ -1,6 +1,6 @@
-import { length } from '../deps.ts';
-import { Coords, Err } from '../model/state.ts';
-import { pad } from './dates.ts';
+import { length } from '../deps';
+import { Coords, Err } from '../model/state';
+import { pad } from './dates';
 
 export const startWatchPosition = (
     onUpdate: (pos: GeolocationPosition) => void,

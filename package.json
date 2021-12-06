@@ -1,0 +1,36 @@
+{
+    "name": "runloop",
+    "version": "1.0.0",
+    "description": "A web based runner's app.",
+    "type": "module",
+    "main": "index.js",
+    "scripts": {
+        "clean": "rm -rf build",
+        "prebuild": "npm run clean && ./script/build-static",
+        "prestart": "npm run clean && ./script/build-static",
+        "build": "./script/bundle.js",
+        "start": "USE_TLS=1 ./script/serve.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/johanbrook/runloop.git"
+    },
+    "author": "Johan Brook",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/johanbrook/runloop/issues"
+    },
+    "homepage": "https://github.com/johanbrook/runloop#readme",
+    "devDependencies": {
+        "@types/mapbox-gl": "^2",
+        "@types/node": "^16",
+        "esbuild": "^0.14.2",
+        "preact": "^10",
+        "typescript": "^4"
+    },
+    "dependencies": {
+        "@turf/length": "^6",
+        "mapbox-gl": "^2"
+    }
+}

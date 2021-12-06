@@ -22,7 +22,7 @@ const config: ConfigSpec = {
     MAPBOX_TOKEN: Flag.Server | Flag.Client,
 };
 
-export const isBrowser = () => typeof Deno == 'undefined';
+export const isBrowser = () => typeof window !== 'undefined';
 
 export const getConfig = (key: string, def?: string): string => {
     const obj = envObject();
@@ -40,7 +40,7 @@ export const mkConfig = (flag: Flag): Record<string, string> => {
 
     for (const [key, val] of Object.entries(config)) {
         if ((val & flag) != 0) {
-            const envVar = Deno.env.get(key);
+            const envVar = process.env[key];
 
             if (envVar) ret[key] = envVar;
         }
@@ -55,8 +55,8 @@ interface AppWindow extends Window {
     [BROWSER_WINDOW_ENV_KEY]?: Record<string, string>;
 }
 
-const envObject = (): Record<string, string> => {
-    if (!isBrowser()) return Deno.env.toObject();
+const envObject = (): Record<string, string | undefined> => {
+    if (!isBrowser()) return process.env;
 
     const config = (window as AppWindow)[BROWSER_WINDOW_ENV_KEY];
 
