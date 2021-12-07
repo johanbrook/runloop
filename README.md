@@ -18,7 +18,7 @@ Visit `https://localhost:3000`.
 
 TBD.
 
-## Runtime config
+## Config
 
 ### `PORT`
 
@@ -31,8 +31,6 @@ Optional. Defaults to `development`.
 ### `MAPBOX_TOKEN`
 
 Required. Generate a personal access token over at [Mapbox](http://mapbox.com). Used for rendering inline maps and using the API.
-
-## Build config
 
 ### `MINIFY`
 

@@ -9,6 +9,8 @@ import { Route, RouteName, routes, useRouter } from './router';
 import { Link } from './components/Link';
 import { useHasMounted } from './lib/has-mounted';
 
+import './app.css';
+
 interface Props {
     route: Route<RouteName>;
 }
