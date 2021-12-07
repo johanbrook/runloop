@@ -6,7 +6,7 @@
         "jsxFactory": "h",
         "jsxFragmentFactory": "Fragment",
         "moduleResolution": "Node",
-        "module": "ES6",
+        "module": "ESNext",
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "strict": true,

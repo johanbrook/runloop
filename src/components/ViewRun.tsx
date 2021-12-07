@@ -1,10 +1,11 @@
-import { h } from '../deps';
+import { h, lazy, Suspense } from '../deps';
 import { formatDuration, formatRange, formatDate } from '../lib/dates';
 import { distanceOf, paceOf, formatDistance } from '../lib/geo';
 import { Run } from '../model/state';
 import { routes } from '../router';
 import { Link } from './Link';
-import { Map } from './Map';
+
+const Map = lazy(() => import('./Map'));
 
 interface Props {
     run: Run;
@@ -37,8 +38,9 @@ export const ViewRun = ({ run, onDelete }: Props) => {
                     Delete run
                 </button>
             </p>
-
-            <Map route={run.geoUpdates.map((u) => u.coords)} />
+            <Suspense fallback={<p>Loading...</p>}>
+                <Map route={run.geoUpdates.map((u) => u.coords)} />
+            </Suspense>
         </article>
     );
 };

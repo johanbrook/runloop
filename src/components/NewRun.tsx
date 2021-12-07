@@ -1,9 +1,10 @@
-import { h, useEffect } from '../deps';
+import { h, useEffect, lazy, Suspense } from '../deps';
 import { Coords, Err } from '../model/state';
 import { getCurrentPosition } from '../lib/geo';
-import { Map } from './Map';
 import { Link } from './Link';
 import { routes } from '../router';
+
+const Map = lazy(() => import('./Map'));
 
 interface Props {
     onStartRun: () => void;
@@ -31,7 +32,9 @@ export const NewRun = ({ onStartRun, onCurrentPosition, onGeolocationError, hasC
                 </Link>
             </div>
 
-            <Map />
+            <Suspense fallback={<p>Loading...</p>}>
+                <Map />
+            </Suspense>
         </section>
     );
 };

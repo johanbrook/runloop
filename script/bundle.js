@@ -1,18 +1,17 @@
 #!/usr/bin/env node
 import esbuild from 'esbuild';
 
-const ENTRYPOINT = 'src/run-app.tsx';
-const BUNDLE = 'build/app.bundle.js';
-
 const minify = !!process.env.MINIFY;
 const env = process.env.ENV || 'development';
 
 if (process.env.NODE_ENV !== env) process.env.NODE_ENV = env;
 
 export const buildOpts = {
-    entryPoints: [ENTRYPOINT],
+    entryPoints: ['src/run-app.tsx', 'src/components/Map.tsx'],
+    splitting: true,
+    format: 'esm',
     bundle: true,
-    outfile: BUNDLE,
+    outdir: 'build',
     sourcemap: true,
     minify,
 };

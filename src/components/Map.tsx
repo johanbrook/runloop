@@ -1,4 +1,5 @@
-import { h, useEffect, useRef, Mapbox } from '../deps';
+import { h, useEffect, useRef } from '../deps';
+import Mapbox from 'mapbox-gl';
 import { getConfig } from '../config';
 import { Coords } from '../model/state';
 import { coordsToGeoJSON } from '../lib/geo';
@@ -9,7 +10,7 @@ interface Props {
     route?: Array<Coords>;
 }
 
-export const Map = ({ route }: Props) => {
+const Map = ({ route }: Props) => {
     const mapEl = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -22,6 +23,8 @@ export const Map = ({ route }: Props) => {
 
     return <div class="Map" ref={mapEl} style="height: 300px"></div>;
 };
+
+export default Map;
 
 type TearDown = () => void;
 
