@@ -1,4 +1,4 @@
-import { hydrate, h } from './deps';
+import { render, h } from './deps';
 import { App } from './App';
 import { Router, Navigator } from './router';
 
@@ -12,4 +12,4 @@ const RoutedApp = () => (
     </Router>
 );
 
-hydrate(<RoutedApp />, document.getElementById('app')!);
+render(<RoutedApp />, document.getElementById('app')!);
