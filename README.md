@@ -32,9 +32,9 @@ Optional. Defaults to `development`.
 
 Required. Generate a personal access token over at [Mapbox](http://mapbox.com). Used for rendering inline maps and using the API.
 
-### `MINIFY`
+### `INLINE`
 
-Defaults to `false`. If truthy, the JS bundle will be minified.
+Defaults to `false`. If truthy, we'll inline the CSS and JS bundles in the `index.html`. Only used in `npm run build`.
 
 ### `USE_TLS`
 

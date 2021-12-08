@@ -7,9 +7,8 @@
     "scripts": {
         "clean": "rm -rf build",
         "prebuild": "npm run clean && ./script/build-static && ./script/check-config.js",
-        "prestart": "npm run clean && ./script/build-static && ./script/check-config.js",
-        "build": "./script/bundle.js",
-        "start": "USE_TLS=1 ./script/serve.js",
+        "build": "./script/bundle.js && ./script/inline-bundle.js",
+        "start": "npm run build && USE_TLS=1 ./script/serve.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {

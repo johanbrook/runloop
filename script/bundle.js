@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import esbuild from 'esbuild';
 
-const minify = !!process.env.MINIFY;
+const minify = !!process.env.INLINE;
 const env = process.env.ENV || 'development';
 
 if (process.env.NODE_ENV !== env) process.env.NODE_ENV = env;

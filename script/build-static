@@ -3,5 +3,4 @@
 set -euo pipefail
 
 mkdir -p build && \
-    cp static/* build && \
-    ./script/inline-config.js
+    cp static/* build
