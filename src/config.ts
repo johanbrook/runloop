@@ -1,4 +1,3 @@
-type Config = Record<string, string>;
 type ConfigSpec = Record<string, Flag>;
 
 export enum Flag {
@@ -6,16 +5,15 @@ export enum Flag {
     Server = 1,
     /** Visible on client. */
     Client = 2,
+    /** Optional for production use. */
+    Optional = 4,
 }
 
-const config: ConfigSpec = {
+export const spec: ConfigSpec = {
     /** Spins up a https server instead of http. Useful in dev in order for Geolocation API to work. */
-    USE_TLS: Flag.Server,
-    /** Use `Deno.emit` (currently unstable) for emitting the client bundle on app boot,
-     * instead of pre-bundling it. */
-    USE_EMIT: Flag.Server,
+    USE_TLS: Flag.Server | Flag.Optional,
     /** The HTTP port to listen to. */
-    PORT: Flag.Server,
+    PORT: Flag.Server | Flag.Optional,
     /** The environment. */
     ENV: Flag.Server | Flag.Client,
     /** Mapbox access token. */
@@ -24,21 +22,23 @@ const config: ConfigSpec = {
 
 export const isBrowser = () => typeof window !== 'undefined';
 
-export const getConfig = (key: string, def?: string): string => {
+export const getConfig = (key: keyof ConfigSpec, def?: string): string => {
+    const specVal = spec[key];
     const obj = envObject();
-    const val: string | null = obj[key] || def || null;
+    const val = obj[key];
+    const isOptional = (specVal & Flag.Optional) != 0;
 
-    if (!val) {
+    if (!val && !isOptional) {
         throw new Error(`The "${key}" env var was required but not passed`);
     }
 
-    return val;
+    return val || def || '';
 };
 
 export const mkConfig = (flag: Flag): Record<string, string> => {
     const ret: Record<string, string> = {};
 
-    for (const [key, val] of Object.entries(config)) {
+    for (const [key, val] of Object.entries(spec)) {
         if ((val & flag) != 0) {
             const envVar = process.env[key];
 
