@@ -90,6 +90,7 @@ interface PageProps {
 
 const ViewRunPage = ({ state, dispatch, route }: PageProps) => {
     const hasMounted = useHasMounted();
+    const { redirect } = useRouter();
 
     if (!hasMounted) {
         return (
@@ -112,12 +113,13 @@ const ViewRunPage = ({ state, dispatch, route }: PageProps) => {
     return (
         <ViewRun
             run={run}
-            onDelete={(run) =>
+            onDelete={(run) => {
                 dispatch({
                     kind: 'delete_run',
                     id: run.id,
-                })
-            }
+                });
+                redirect(routes.runs({}));
+            }}
         />
     );
 };
