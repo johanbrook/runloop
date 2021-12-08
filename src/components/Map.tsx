@@ -21,6 +21,20 @@ const Map = ({ route }: Props) => {
         return tearDown;
     }, []);
 
+    // Lazy load the Mapbox CSS – if needed – when <Map /> is rendered
+    useEffect(() => {
+        const id = 'mapbox-lazy-css';
+
+        if (document.getElementById(id)) return;
+
+        const head = document.getElementsByTagName('head')[0]!;
+        const link = document.createElement('link');
+        link.id = id;
+        link.setAttribute('href', 'https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.css');
+        link.setAttribute('rel', 'stylesheet');
+        head.insertAdjacentElement('beforeend', link);
+    }, []);
+
     return <div class="Map" ref={mapEl} style="height: 300px"></div>;
 };
 
