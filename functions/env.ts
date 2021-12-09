@@ -9,5 +9,7 @@ export const onRequest = async (context) => {
         data, // arbitrary space for passing data between middlewares
     } = context;
 
-    return new Response('Hello, world! ' + JSON.stringify(context, null, 4));
+    console.log(process.env);
+
+    return new Response('Hello, world! ' + JSON.stringify({ context, procEnv: process.env }, null, 4));
 };
