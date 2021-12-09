@@ -46,33 +46,4 @@ export const formatDuration = (durMs: Millis, format: 'numerical' | 'units') => 
     }
 };
 
-const INTERVALS: { [k: number]: string } = {
-    0: 'Midnight',
-    1: 'Night',
-    3: 'Early morning',
-    5: 'Before breakfast',
-    6: 'Morning',
-    9: 'Late morning',
-    11: 'Lunch',
-    13: 'Afternoon',
-    17: 'Evening',
-    20: 'Late evening',
-    23: 'Night',
-};
-
-export const formatRunTitle = (startedAt: Millis): string => {
-    const hours = new Date(startedAt).getHours();
-    let prev: string = 'A nice';
-
-    for (const [hour, name] of Object.entries(INTERVALS)) {
-        if (hours > parseInt(hour, 10)) {
-            prev = name;
-            continue;
-        }
-        return prev;
-    }
-
-    return prev;
-};
-
 export const pad = (num: number) => (num < 10 ? `0${num}` : num);

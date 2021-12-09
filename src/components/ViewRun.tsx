@@ -1,7 +1,7 @@
 import { h, lazy, Suspense } from '../deps';
 import { formatDuration, formatRange, formatDate } from '../lib/dates';
 import { distanceOf, formatPace, formatDistance, statsOf } from '../lib/geo';
-import { Run } from '../model/state';
+import { Run, runTitleOf } from '../model/state';
 import { routes } from '../router';
 import { Link } from './Link';
 
@@ -23,7 +23,7 @@ export const ViewRun = ({ run, onDelete }: Props) => {
                 </Link>
             </p>
 
-            <h1>Run {run.id}</h1>
+            <h1>{runTitleOf(run.startedAt)}</h1>
 
             <table class="RunStatsTable">
                 <tr>

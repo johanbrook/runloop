@@ -66,3 +66,35 @@ export const positionHasChanged = (run: Run, coords: Coords): boolean => {
 export const findRunById = (state: State, id: number): Run | undefined => state.appConf.runs[id];
 
 const COORD_TOLERANCE = 0.00001;
+
+const INTERVALS: { [k: number]: string } = {
+    0: 'Midnight',
+    1: 'Night',
+    3: 'Early morning',
+    5: 'Before breakfast',
+    6: 'Morning',
+    9: 'Late morning',
+    11: 'Lunch',
+    13: 'Afternoon',
+    17: 'Evening',
+    20: 'Late evening',
+    23: 'Night',
+};
+
+type Millis = number;
+
+export const runTitleOf = (startedAt: Millis): string => {
+    const hours = new Date(startedAt).getHours();
+    let prev: string = 'A nice';
+    const suffix = ' run';
+
+    for (const [hour, name] of Object.entries(INTERVALS)) {
+        if (hours > parseInt(hour, 10)) {
+            prev = name;
+            continue;
+        }
+        return prev + suffix;
+    }
+
+    return prev + suffix;
+};

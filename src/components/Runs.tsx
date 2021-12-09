@@ -1,6 +1,6 @@
 import { h, Fragment, useMemo } from '../deps';
-import { formatDate, formatDuration, formatRange, formatRunTitle } from '../lib/dates';
-import { Run } from '../model/state';
+import { formatDate } from '../lib/dates';
+import { Run, runTitleOf } from '../model/state';
 import { statsOf } from '../lib/geo';
 import { Link } from './Link';
 import { routes } from '../router';
@@ -38,7 +38,7 @@ const Run = ({ run }: { run: Run }) => {
     return (
         <article class="RunItem">
             <header>
-                <h2 class="no-wrap">{formatRunTitle(run.startedAt)} run →</h2>
+                <h2 class="no-wrap">{runTitleOf(run.startedAt)} →</h2>
                 <time class="detail">{formatDate(run.startedAt)}</time>
             </header>
 
