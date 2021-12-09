@@ -9,6 +9,7 @@ import { Route, RouteName, routes, useRouter } from './router';
 
 import './app.css';
 import { NavBar } from './components/NavBar';
+import { Settings } from './components/Settings';
 
 interface Props {
     route: Route<RouteName>;
@@ -74,7 +75,7 @@ export const App = ({ route }: Props) => {
                             return <p>To be implemented</p>;
 
                         case 'settings':
-                            return <p>To be implemented</p>;
+                            return <Settings />;
                     }
                     // Assert exhaustive
                     ((x: never) => {})(route.name);
