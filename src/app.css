@@ -1,6 +1,8 @@
 @import './lib/normalize.css';
 
 :root {
+    /* Controlled dynamically later by JS. See #app. */
+    --app-height: 100vh;
     --inset: 3vw;
 
     --color-bg: #fff;
@@ -80,12 +82,13 @@ html {
 
 html,
 body {
-    min-height: 100vh;
+    height: 100%;
     display: flex;
     flex-direction: column;
 }
 
 #app {
+    min-height: var(--app-height);
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -213,7 +216,7 @@ a:active {
     width: 3em;
     height: 3em;
     display: inline-flex;
-    right: 10px;
+    right: max(env(safe-area-inset-right), 10px);
     bottom: calc(100% + 10px);
     text-indent: -999em;
     box-shadow: 2px 2px 4px var(--shadow);

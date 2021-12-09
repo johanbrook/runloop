@@ -3,6 +3,7 @@ import './lib/array-at-polyfill';
 import { render, h } from './deps';
 import { App } from './App';
 import { Router, Navigator } from './router';
+import { fixMobileHeight } from './lib/mobile-height-fix';
 
 const navigator: Navigator = (pathname, replace = false, redirect = false) => {
     window.history[replace || redirect ? 'replaceState' : 'pushState'](null, '', pathname);
@@ -15,3 +16,11 @@ const RoutedApp = () => (
 );
 
 render(<RoutedApp />, document.getElementById('app')!);
+
+// Adding an empty touch listener will make :active CSS pseudo selector
+// work in order to style taps on elements. Joy.
+document.addEventListener('touchstart', (evt) => {});
+
+// This is solving the STILL outstanding problem of using
+// height: 100vh on Mobile Safari.
+fixMobileHeight();
