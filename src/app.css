@@ -294,5 +294,5 @@ a:active {
 
 .link-block:active {
     color: inherit;
-    background-color: hsl(249 3% 54% / 0.05);
+    background-color: hsl(249 3% 54% / 0.15);
 }
