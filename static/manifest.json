@@ -1,0 +1,9 @@
+{
+    "name": "Runloop",
+    "scope": "/",
+    "lang": "en-GB",
+    "theme_color": "#fff",
+    "display": "standalone",
+    "background_color": "#fff",
+    "description": "A run tracker without bloat."
+}
