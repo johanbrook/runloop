@@ -1,3 +1,5 @@
+import './lib/array-at-polyfill';
+
 import { render, h } from './deps';
 import { App } from './App';
 import { Router, Navigator } from './router';
