@@ -23,14 +23,18 @@ export const NewRun = ({ onStartRun, onCurrentPosition, onGeolocationError, hasC
 
     return (
         <section>
-            <div>
+            <p>
+                <Link to={routes.runs({})} class="BtnLink BackLink">
+                    Back
+                </Link>
+            </p>
+
+            <h1>New run</h1>
+            <p>
                 <button class="btn" disabled={!hasCurrentPosition} onClick={() => onStartRun()}>
                     Start running
                 </button>
-                <Link to={routes.runs({})} class="btn">
-                    Cancel
-                </Link>
-            </div>
+            </p>
 
             <Suspense fallback={<p>Loading...</p>}>
                 <Map />
