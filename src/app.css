@@ -1,39 +1,17 @@
 @import './lib/normalize.css';
 
-* {
-    box-sizing: border-box;
-}
-
-html,
-body {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    /* Weird that I have to set this myself? */
-    background-color: Canvas;
-    -webkit-tap-highlight-color: transparent;
-}
-
-#app {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-main {
-    flex: 1;
-}
-
 :root {
     --inset: 3vw;
 
+    --color-bg: #fff;
+    --color-text: #222;
     --color-detail: hsl(249 3% 54%);
     --color-accent: hsl(211 100% 50%);
     --color-border: hsl(240 5% 83%);
 
     --btn-bg: var(--color-accent);
 
-    --shadow: hsl(249 0% 0%);
+    --shadow: hsl(249 45% 3% / 0.3);
 
     /* Type scale */
     --size-1: 2.5rem;
@@ -51,10 +29,68 @@ main {
 
 @media (prefers-color-scheme: dark) {
     :root {
+        --color-bg: #000;
+        --color-text: #fff;
         --color-accent: hsl(210 99% 52%);
         --shadow: black;
         --color-border: hsl(249 6% 25%);
     }
+}
+
+/* System color tricks from https://blog.jim-nielsen.com/2021/css-system-colors/ */
+
+/* For browsers that don’t support `color-scheme` and therefore
+   don't handle system dark mode for you automatically 
+   (Firefox), handle it for them. */
+@supports not (color-scheme: light dark) {
+    html {
+        background: var(--color-bg);
+        color: var(--color-text);
+    }
+}
+
+/* For browsers that support automatic dark/light mode
+   As well as system colors, set those */
+@supports (color-scheme: light dark) and (background-color: Canvas) and (color: CanvasText) {
+    :root {
+        --color-bg: Canvas;
+        --color-text: CanvasText;
+    }
+}
+
+/* For Safari on iOS. Hacky, but it works. */
+@supports (background-color: -apple-system-control-background) and (color: text) {
+    :root {
+        --color-bg: -apple-system-control-background;
+        --color-text: text;
+    }
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#app {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
 }
 
 html {
@@ -142,7 +178,7 @@ a {
 }
 
 .NavBar {
-    background-color: Canvas;
+    background-color: var(--color-bg);
     font-size: var(--size-3);
     position: fixed;
     padding: var(--inset);
@@ -160,19 +196,19 @@ a {
     position: absolute;
     border-radius: 100%;
     background-color: var(--color-accent);
-    color: CanvasText;
+    color: inherit;
     width: 3em;
     height: 3em;
     display: inline-flex;
     right: 10px;
     bottom: calc(100% + 10px);
     text-indent: -999em;
-    box-shadow: 2px 2px 6px var(--shadow);
+    box-shadow: 2px 2px 4px var(--shadow);
 }
 
 .BtnLink {
     display: inline-block;
-    padding: 2px;
+    padding: 4px;
     font-weight: 500;
 }
 
