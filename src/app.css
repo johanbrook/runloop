@@ -9,47 +9,66 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    /* Weird that I have to set this myself? */
+    background-color: Canvas;
+    -webkit-tap-highlight-color: transparent;
 }
 
 #app {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
 }
 
 :root {
-    color-scheme: light dark;
     --inset: 3vw;
 
     --color-detail: hsl(249 3% 54%);
     --color-accent: hsl(211 100% 50%);
+    --color-border: hsl(240 5% 83%);
 
     --btn-bg: var(--color-accent);
 
+    --shadow: hsl(249 0% 0%);
+
     /* Type scale */
     --size-1: 2.5rem;
-    --size-2: 1.75rem;
-    --size-3: 1rem;
-    --size-4: 0.85rem;
+    --size-2: 1.5rem;
+    --size-3: 1.15rem;
+    --size-4: 1rem;
+    --size-5: 0.85rem;
 
     /* Spacings */
-    --space-1: 1.5rem;
-    --space-2: 1rem;
-    --space-3: 0.5rem;
+    --space-1: 2rem;
+    --space-2: 1.5rem;
+    --space-3: 1rem;
+    --space-4: 0.5rem;
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
         --color-accent: hsl(210 99% 52%);
+        --shadow: black;
+        --color-border: hsl(249 6% 25%);
     }
 }
 
 html {
-    font-size: var(--size-3);
+    font-size: var(--size-4);
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
         'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 }
 
 body {
     padding: var(--inset);
+}
+
+p {
+    margin: 0 0 var(--space-3);
 }
 
 h1,
@@ -103,16 +122,62 @@ a {
 }
 
 .RunItem {
-    margin-bottom: var(--space-1);
+    margin-bottom: var(--space-2);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--color-border);
 }
 
 .RunItem header {
     margin-bottom: var(--space-3);
 }
 
-.RunItem table {
+.RunItem header h2 {
+    margin-bottom: 0;
+}
+
+.RunStatsTable {
     width: 100%;
     table-layout: fixed;
+    text-align: left;
+}
+
+.NavBar {
+    background-color: Canvas;
+    font-size: var(--size-3);
+    position: fixed;
+    padding: var(--inset);
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.NavBar ul {
+    display: flex;
+    justify-content: space-between;
+}
+
+.NavBar__Float {
+    position: absolute;
+    border-radius: 100%;
+    background-color: var(--color-accent);
+    color: CanvasText;
+    width: 3em;
+    height: 3em;
+    display: inline-flex;
+    right: 10px;
+    bottom: calc(100% + 10px);
+    text-indent: -999em;
+    box-shadow: 2px 2px 6px var(--shadow);
+}
+
+.BtnLink {
+    display: inline-block;
+    padding: 2px;
+    font-weight: 500;
+}
+
+.BackLink::before {
+    content: '← ';
 }
 
 /* HELPERS */
@@ -122,8 +187,8 @@ a {
 }
 
 .detail {
-    color: var(--color-detail);
-    font-size: var(--size-4);
+    color: GrayText;
+    font-size: var(--size-5);
     font-weight: normal;
 }
 
@@ -153,4 +218,8 @@ a {
 
 .no-wrap {
     white-space: nowrap;
+}
+
+.w-full {
+    width: 100%;
 }

@@ -1,6 +1,6 @@
 import { length } from '../deps';
-import { Coords, Err } from '../model/state';
-import { pad } from './dates';
+import { Coords, Err, Run } from '../model/state';
+import { formatDuration, pad } from './dates';
 
 export const startWatchPosition = (
     onUpdate: (pos: GeolocationPosition) => void,
@@ -57,7 +57,7 @@ export const distanceOf = (coords: Array<Coords>): Kilometers =>
         units: 'kilometers',
     });
 
-export const formatDistance = (distance: Kilometers): string => round(distance) + 'km';
+export const formatDistance = (distance: Kilometers): string => round(distance) + ' km';
 
 /** Returns the pace in minutes per kilometer. */
 export const formatPace = (distance: Kilometers, duration: Ms) => {
@@ -67,7 +67,28 @@ export const formatPace = (distance: Kilometers, duration: Ms) => {
     const secs = Math.floor(totalSecs % 60);
     const mins = Math.floor(totalSecs / 60);
 
-    return `${pad(mins)}:${pad(secs)}`;
+    return `${pad(mins)}:${pad(secs)} min/km`;
+};
+
+interface FormattedRunStats {
+    /** In Kilometers. */
+    distance: string;
+    /** Minutes per Kilometer. */
+    pace: string;
+    /** Minutes and seconds. */
+    duration: string;
+}
+
+export const statsOf = (run: Run): FormattedRunStats => {
+    const distance = distanceOf(run.geoUpdates.map((u) => u.coords));
+    const duration = run.finishedAt ? formatDuration(Math.abs(run.finishedAt - run.startedAt), 'units') : '-';
+    const pace = run.finishedAt ? formatPace(distance, run.finishedAt - run.startedAt) : '-';
+
+    return {
+        distance: formatDistance(distance),
+        duration,
+        pace,
+    };
 };
 
 /** Rounds a number to two decimals. */

@@ -1,4 +1,4 @@
-import { h, useEffect } from './deps';
+import { h, useEffect, Fragment } from './deps';
 import { NewRun } from './components/NewRun';
 import { CurrentRun } from './components/CurrentRun';
 import { Runs } from './components/Runs';
@@ -6,10 +6,9 @@ import { ViewRun } from './components/ViewRun';
 import { Action, useModel } from './model/reducer';
 import { AppState, findRunById, State } from './model/state';
 import { Route, RouteName, routes, useRouter } from './router';
-import { Link } from './components/Link';
-import { useHasMounted } from './lib/has-mounted';
 
 import './app.css';
+import { NavBar } from './components/NavBar';
 
 interface Props {
     route: Route<RouteName>;
@@ -39,46 +38,50 @@ export const App = ({ route }: Props) => {
     }
 
     return (
-        <main>
-            {(() => {
-                switch (route.name) {
-                    case 'viewRun':
-                        return <ViewRunPage state={state} dispatch={dispatch} route={route} />;
+        <>
+            <main>
+                {(() => {
+                    switch (route.name) {
+                        case 'viewRun':
+                            return <ViewRunPage state={state} dispatch={dispatch} route={route} />;
 
-                    case 'runs':
-                        return (
-                            <section>
-                                <Link to={routes.newRun({})} class="btn">
-                                    New run
-                                </Link>
-                                <Runs runs={Object.values(state.appConf.runs)} />
-                            </section>
-                        );
+                        case 'runs':
+                            return <Runs runs={Object.values(state.appConf.runs)} />;
 
-                    case 'newRun':
-                        return (
-                            <NewRun
-                                hasCurrentPosition={!!state.currentCoords}
-                                onCurrentPosition={(coords) =>
-                                    dispatch({
-                                        kind: 'set_current_position',
-                                        coords,
-                                    })
-                                }
-                                onGeolocationError={(err) => dispatch(err)}
-                                onStartRun={() =>
-                                    dispatch({
-                                        kind: 'start_run',
-                                    })
-                                }
-                            />
-                        );
+                        case 'newRun':
+                            return (
+                                <NewRun
+                                    hasCurrentPosition={!!state.currentCoords}
+                                    onCurrentPosition={(coords) =>
+                                        dispatch({
+                                            kind: 'set_current_position',
+                                            coords,
+                                        })
+                                    }
+                                    onGeolocationError={(err) => dispatch(err)}
+                                    onStartRun={() =>
+                                        dispatch({
+                                            kind: 'start_run',
+                                        })
+                                    }
+                                />
+                            );
 
-                    case 'currentRun':
-                        return <CurrentRunPage state={state} dispatch={dispatch} route={route} />;
-                }
-            })()}
-        </main>
+                        case 'currentRun':
+                            return <CurrentRunPage state={state} dispatch={dispatch} route={route} />;
+
+                        case 'stats':
+                            return <p>To be implemented</p>;
+
+                        case 'settings':
+                            return <p>To be implemented</p>;
+                    }
+                    // Assert exhaustive
+                    ((x: never) => {})(route.name);
+                })()}
+            </main>
+            <NavBar />
+        </>
     );
 };
 
@@ -89,16 +92,7 @@ interface PageProps {
 }
 
 const ViewRunPage = ({ state, dispatch, route }: PageProps) => {
-    const hasMounted = useHasMounted();
     const { redirect } = useRouter();
-
-    if (!hasMounted) {
-        return (
-            <section>
-                <h1>Run {route.params.id}</h1>
-            </section>
-        );
-    }
 
     const run = findRunById(state, Number(route.params.id));
 
@@ -125,16 +119,7 @@ const ViewRunPage = ({ state, dispatch, route }: PageProps) => {
 };
 
 const CurrentRunPage = ({ state, dispatch, route }: PageProps) => {
-    const hasMounted = useHasMounted();
     const { redirect } = useRouter();
-
-    if (!hasMounted) {
-        return (
-            <section>
-                <h1>Run {route.params.id}</h1>
-            </section>
-        );
-    }
 
     const run = state.appConf.currentRun;
 

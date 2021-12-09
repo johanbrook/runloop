@@ -1,6 +1,6 @@
 import { h, lazy, Suspense } from '../deps';
 import { formatDuration, formatRange, formatDate } from '../lib/dates';
-import { distanceOf, formatPace, formatDistance } from '../lib/geo';
+import { distanceOf, formatPace, formatDistance, statsOf } from '../lib/geo';
 import { Run } from '../model/state';
 import { routes } from '../router';
 import { Link } from './Link';
@@ -13,25 +13,30 @@ interface Props {
 }
 
 export const ViewRun = ({ run, onDelete }: Props) => {
-    const distance = distanceOf(run.geoUpdates.map((u) => u.coords));
-    const duration = run.finishedAt ? formatDuration(Math.abs(run.finishedAt - run.startedAt), 'units') : -1;
-    const pace = run.finishedAt ? formatPace(distance, run.finishedAt - run.startedAt) : -1;
+    const { distance, pace, duration } = statsOf(run);
 
     return (
         <article>
+            <p>
+                <Link to={routes.runs({})} class="BtnLink BackLink">
+                    Back
+                </Link>
+            </p>
+
             <h1>Run {run.id}</h1>
-            <p>
-                <Link to={routes.runs({})}>Back</Link>
-            </p>
-            <p>
-                {formatDistance(distance)}
-                {duration != -1 && distance > 0 ? ` — ${duration} — ${pace} min/km` : null}
-            </p>
-            <p>
-                <small>
-                    {run.finishedAt ? formatRange(run.startedAt, run.finishedAt) : formatDate(run.startedAt)}
-                </small>
-            </p>
+
+            <table class="RunStatsTable">
+                <tr>
+                    <th class="detail">Distance</th>
+                    <th class="detail">Pace</th>
+                    <th class="detail">Time</th>
+                </tr>
+                <tr>
+                    <td>{distance}</td>
+                    <td>{pace}</td>
+                    <td>{duration}</td>
+                </tr>
+            </table>
 
             <p>
                 <button class="btn" onClick={() => onDelete(run)}>

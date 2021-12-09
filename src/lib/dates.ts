@@ -11,7 +11,7 @@ export const formatDate = (ms: number) => dateFormatter.format(new Date(ms));
 export const formatRange = (start: number, end: number) =>
     (dateFormatter as DateTimeFormat).formatRange(new Date(start), new Date(end));
 
-const dateFormatter = new Intl.DateTimeFormat([], {
+const dateFormatter = new Intl.DateTimeFormat('en-GB', {
     weekday: 'short',
     month: 'short',
     day: 'numeric',
@@ -19,7 +19,7 @@ const dateFormatter = new Intl.DateTimeFormat([], {
     minute: 'numeric',
 });
 
-const timeFormatter = new Intl.DateTimeFormat([], {
+const timeFormatter = new Intl.DateTimeFormat('en-GB', {
     timeStyle: 'short',
 });
 
@@ -32,9 +32,9 @@ export const formatDuration = (durMs: Millis, format: 'numerical' | 'units') => 
     const ret = [];
 
     if (format == 'units') {
-        if (hours > 0) ret.push(hours + 'h');
-        if (mins > 0) ret.push(mins + 'm');
-        ret.push(secs + 's');
+        if (hours > 0) ret.push(hours + ' h');
+        if (mins > 0) ret.push(mins + ' m');
+        ret.push(secs + ' s');
 
         return ret.join(' ');
     } else {

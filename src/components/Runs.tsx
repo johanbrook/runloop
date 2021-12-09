@@ -1,25 +1,19 @@
 import { h, Fragment, useMemo } from '../deps';
 import { formatDate, formatDuration, formatRange, formatRunTitle } from '../lib/dates';
 import { Run } from '../model/state';
-import { formatDistance, distanceOf, formatPace } from '../lib/geo';
+import { statsOf } from '../lib/geo';
 import { Link } from './Link';
 import { routes } from '../router';
-import { useHasMounted } from '../lib/has-mounted';
 
 interface Props {
     runs: Run[];
 }
 
 export const Runs = ({ runs }: Props) => {
-    const hasMounted = useHasMounted();
     const sortedRuns = useMemo(() => [...runs].sort(sortBy<Run>('startedAt')), [runs]);
 
-    if (!hasMounted) {
-        return <h1>Runs</h1>;
-    }
-
     return (
-        <>
+        <section>
             <h1>Runs</h1>
             {sortedRuns.length == 0 ? (
                 <p>No runs yet</p>
@@ -34,30 +28,29 @@ export const Runs = ({ runs }: Props) => {
                     ))}
                 </ol>
             )}
-        </>
+        </section>
     );
 };
 
 const Run = ({ run }: { run: Run }) => {
-    const distance = distanceOf(run.geoUpdates.map((u) => u.coords));
-    const duration = run.finishedAt ? formatDuration(Math.abs(run.finishedAt - run.startedAt), 'units') : '-';
-    const pace = run.finishedAt ? formatPace(distance, run.finishedAt - run.startedAt) : '-';
+    const { distance, pace, duration } = statsOf(run);
 
     return (
         <article class="RunItem">
-            <header class="flex justify-between items-baseline">
-                <h2 class="flex-1">{formatRunTitle(run.startedAt)} run</h2>
-                <time class="detail no-wrap">{formatDate(run.startedAt)}</time>
+            <header>
+                <h2 class="no-wrap">{formatRunTitle(run.startedAt)} run →</h2>
+                <time class="detail">{formatDate(run.startedAt)}</time>
             </header>
-            <table>
+
+            <table class="RunStatsTable">
                 <tr>
                     <th class="detail">Distance</th>
                     <th class="detail">Pace</th>
                     <th class="detail">Time</th>
                 </tr>
                 <tr>
-                    <td>{formatDistance(distance)}</td>
-                    <td>{pace} min/km</td>
+                    <td>{distance}</td>
+                    <td>{pace}</td>
                     <td>{duration}</td>
                 </tr>
             </table>

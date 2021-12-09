@@ -6,6 +6,8 @@ export const routes = {
     newRun: path('/runs/new'),
     currentRun: path('/runs/current'),
     viewRun: path('/runs/:id'),
+    stats: path('/stats'),
+    settings: path('/settings'),
 };
 
 export type Route<R extends RouteName> = {
