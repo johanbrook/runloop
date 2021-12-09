@@ -25,7 +25,11 @@ interface DeleteRun {
     id: number;
 }
 
-export type Action = StartRun | FinishRun | GeoUpdateMsg | SetCurrentPosition | DeleteRun | Err;
+interface Reset {
+    kind: 'reset';
+}
+
+export type Action = StartRun | FinishRun | GeoUpdateMsg | SetCurrentPosition | DeleteRun | Reset | Err;
 
 const STORAGE_KEY = 'runloop_v1';
 
@@ -112,6 +116,11 @@ const reducer: Reducer<State, Action> = (prev, action): State => {
             };
         }
 
+        case 'reset':
+            const newState = INITIAL_STATE;
+            resetStorage(newState);
+            return newState;
+
         case 'err':
             return {
                 ...prev,
@@ -159,7 +168,7 @@ const initializer = (initial: State): State => {
             if (persisted != null) {
                 return unpack(initial, JSON.parse(persisted));
             } else {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(pack(initial)));
+                resetStorage(initial);
                 return initial;
             }
         } catch {
@@ -171,4 +180,8 @@ const initializer = (initial: State): State => {
     console.log('state', state);
 
     return state;
+};
+
+const resetStorage = (state: State) => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(pack(state)));
 };

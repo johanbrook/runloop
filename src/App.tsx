@@ -75,7 +75,15 @@ export const App = ({ route }: Props) => {
                             return <p>To be implemented</p>;
 
                         case 'settings':
-                            return <Settings />;
+                            return (
+                                <Settings
+                                    onReset={() =>
+                                        dispatch({
+                                            kind: 'reset',
+                                        })
+                                    }
+                                />
+                            );
                     }
                     // Assert exhaustive
                     ((x: never) => {})(route.name);
