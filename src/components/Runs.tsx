@@ -21,7 +21,7 @@ export const Runs = ({ runs }: Props) => {
                 <ol>
                     {sortedRuns.map((r) => (
                         <li key={r.id}>
-                            <Link to={routes.viewRun({ id: r.id.toString() })} class="block color-inherit">
+                            <Link to={routes.viewRun({ id: r.id.toString() })} class="link-block">
                                 <Run run={r} />
                             </Link>
                         </li>
