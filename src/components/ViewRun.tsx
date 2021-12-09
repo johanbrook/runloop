@@ -1,6 +1,6 @@
 import { h, lazy, Suspense } from '../deps';
 import { formatDuration, formatRange, formatDate } from '../lib/dates';
-import { distanceOf, paceOf, formatDistance } from '../lib/geo';
+import { distanceOf, formatPace, formatDistance } from '../lib/geo';
 import { Run } from '../model/state';
 import { routes } from '../router';
 import { Link } from './Link';
@@ -15,7 +15,7 @@ interface Props {
 export const ViewRun = ({ run, onDelete }: Props) => {
     const distance = distanceOf(run.geoUpdates.map((u) => u.coords));
     const duration = run.finishedAt ? formatDuration(Math.abs(run.finishedAt - run.startedAt), 'units') : -1;
-    const pace = run.finishedAt ? paceOf(distance, run.finishedAt - run.startedAt) : -1;
+    const pace = run.finishedAt ? formatPace(distance, run.finishedAt - run.startedAt) : -1;
 
     return (
         <article>

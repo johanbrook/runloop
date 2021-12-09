@@ -60,8 +60,8 @@ export const distanceOf = (coords: Array<Coords>): Kilometers =>
 export const formatDistance = (distance: Kilometers): string => round(distance) + 'km';
 
 /** Returns the pace in minutes per kilometer. */
-export const paceOf = (distance: Kilometers, duration: Ms) => {
-    if (distance < 0 || duration < 0) return 0;
+export const formatPace = (distance: Kilometers, duration: Ms) => {
+    if (distance <= 0 || duration <= 0) return '-';
 
     const totalSecs = duration / 1000 / distance;
     const secs = Math.floor(totalSecs % 60);
