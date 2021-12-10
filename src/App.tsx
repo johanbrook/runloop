@@ -89,7 +89,8 @@ export const App = ({ route }: Props) => {
                     ((x: never) => {})(route.name);
                 })()}
             </main>
-            <NavBar />
+
+            <NavBar currentRun={state.appConf.currentRun} />
         </>
     );
 };

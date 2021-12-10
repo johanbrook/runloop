@@ -1,8 +1,6 @@
 import { h, useEffect, lazy, Suspense } from '../deps';
 import { Coords, Err } from '../model/state';
 import { getCurrentPosition } from '../lib/geo';
-import { Link } from './Link';
-import { routes } from '../router';
 import { MapPlaceholder } from './Loading';
 
 const Map = lazy(() => import('./Map'));
@@ -24,12 +22,6 @@ export const NewRun = ({ onStartRun, onCurrentPosition, onGeolocationError, hasC
 
     return (
         <section>
-            <p>
-                <Link to={routes.runs({})} class="BtnLink BackLink">
-                    Back
-                </Link>
-            </p>
-
             <h1>New run</h1>
 
             <Suspense fallback={<MapPlaceholder />}>
