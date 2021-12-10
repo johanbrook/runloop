@@ -1,6 +1,6 @@
 import { h } from '../deps';
 import { Run } from '../model/state';
-import { routes } from '../router';
+import { routes, useRouter } from '../router';
 import { Link } from './Link';
 
 interface Props {
@@ -8,9 +8,11 @@ interface Props {
 }
 
 export const NavBar = ({ currentRun }: Props) => {
+    const { route } = useRouter();
+
     return (
         <nav role="navigation" class="NavBar">
-            {currentRun ? (
+            {route.name == 'currentRun' || route.name == 'newRun' ? null : currentRun ? (
                 <Link to={routes.currentRun({})} class="NavBar__Float">
                     Current run
                 </Link>

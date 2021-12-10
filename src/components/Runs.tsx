@@ -1,4 +1,4 @@
-import { h, Fragment, useMemo } from '../deps';
+import { h, useMemo } from '../deps';
 import { formatDate } from '../lib/dates';
 import { Run, runTitleOf } from '../model/state';
 import { statsOf } from '../lib/geo';
