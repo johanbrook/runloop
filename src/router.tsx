@@ -79,6 +79,7 @@ const getMatchingRoute = (url: URL): Route<RouteName> | null => {
 // Components
 
 interface RouterCtx {
+    route: Route<RouteName>;
     navigate: (to: Pathname, replace?: boolean) => void;
     redirect: (to: Pathname) => void;
 }
@@ -105,6 +106,7 @@ export const Router = ({ initialUrl, children, navigator }: RouterProps) => {
     }, []);
 
     const ctx: RouterCtx = {
+        route: route!,
         navigate: router.navigate,
         redirect: router.redirect,
     };
