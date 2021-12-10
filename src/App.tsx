@@ -155,10 +155,15 @@ const CurrentRunPage = ({ state, dispatch, route }: PageProps) => {
             onFinishRun={() => {
                 dispatch({
                     kind: 'finish_run',
-                    id: run.id,
                 });
                 redirect(routes.viewRun({ id: run.id.toString() }));
             }}
+            onPauseResumeRun={(pause) =>
+                dispatch({
+                    kind: 'pause_resume_run',
+                    pause,
+                })
+            }
         />
     );
 };

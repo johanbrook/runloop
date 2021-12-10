@@ -1,5 +1,5 @@
 import { useCallback, useReducer, Reducer } from '../deps';
-import { Err, INITIAL_STATE, State, GeoUpdate, Run, Coords, AppConf } from './state';
+import { Err, INITIAL_STATE, State, GeoUpdate, Run, Coords, AppConf, Event } from './state';
 
 interface StartRun {
     kind: 'start_run';
@@ -7,7 +7,6 @@ interface StartRun {
 
 interface FinishRun {
     kind: 'finish_run';
-    id: number;
 }
 
 interface GeoUpdateMsg {
@@ -25,11 +24,24 @@ interface DeleteRun {
     id: number;
 }
 
+interface PauseResumeRun {
+    kind: 'pause_resume_run';
+    pause: boolean;
+}
+
 interface Reset {
     kind: 'reset';
 }
 
-export type Action = StartRun | FinishRun | GeoUpdateMsg | SetCurrentPosition | DeleteRun | Reset | Err;
+export type Action =
+    | StartRun
+    | FinishRun
+    | GeoUpdateMsg
+    | SetCurrentPosition
+    | DeleteRun
+    | PauseResumeRun
+    | Reset
+    | Err;
 
 const STORAGE_KEY = 'runloop_v1';
 
@@ -47,6 +59,7 @@ const reducer: Reducer<State, Action> = (prev, action): State => {
                         id,
                         startedAt: Date.now(),
                         geoUpdates: [],
+                        events: [],
                     },
                 },
             };
@@ -55,9 +68,7 @@ const reducer: Reducer<State, Action> = (prev, action): State => {
         case 'geo_update_msg': {
             const { currentRun } = prev.appConf;
 
-            if (!currentRun) {
-                throw new Error(`Invariant: No currentRun when receiving ${action.kind}`);
-            }
+            invariant(currentRun, `No currentRun when receiving ${action.kind}`);
 
             return {
                 ...prev,
@@ -75,9 +86,7 @@ const reducer: Reducer<State, Action> = (prev, action): State => {
         case 'finish_run': {
             const { currentRun } = prev.appConf;
 
-            if (!currentRun) {
-                throw new Error(`Invariant: No currentRun when receiving ${action.kind}`);
-            }
+            invariant(currentRun, `No currentRun when receiving ${action.kind}`);
 
             const finishedRun: Run = {
                 ...currentRun,
@@ -90,7 +99,7 @@ const reducer: Reducer<State, Action> = (prev, action): State => {
                     ...prev.appConf,
                     currentRun: undefined,
                     runs: {
-                        [action.id]: finishedRun,
+                        [finishedRun.id]: finishedRun,
                         ...prev.appConf.runs,
                     },
                 },
@@ -116,6 +125,34 @@ const reducer: Reducer<State, Action> = (prev, action): State => {
             };
         }
 
+        case 'pause_resume_run':
+            const { currentRun } = prev.appConf;
+
+            invariant(currentRun, `No currentRun when receiving ${action.kind}`);
+
+            const type = action.pause ? 'pause' : 'resume';
+
+            invariant(
+                currentRun.events.at(-1)?.type != type,
+                `Previous event type is equal to the next resulting event type (${type})`
+            );
+
+            const event: Event = {
+                type,
+                time: Date.now(),
+            };
+
+            return {
+                ...prev,
+                appConf: {
+                    ...prev.appConf,
+                    currentRun: {
+                        ...currentRun,
+                        events: [...currentRun.events, event],
+                    },
+                },
+            };
+
         case 'reset':
             const newState = INITIAL_STATE;
             resetStorage(newState);
@@ -128,6 +165,12 @@ const reducer: Reducer<State, Action> = (prev, action): State => {
             };
     }
 };
+
+function invariant(cond: unknown, msg: string): asserts cond {
+    if (!cond) {
+        throw new Error(`Invariant: ${msg}`);
+    }
+}
 
 const pack = (s: State) => s.appConf;
 const unpack = (s: State, appConf: AppConf): State => ({

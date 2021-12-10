@@ -1,3 +1,5 @@
+type TimestampMs = number;
+
 export enum AppState {
     Inited = 'INITED',
     Failed = 'FAILED',
@@ -26,14 +28,20 @@ export interface Err {
 
 export interface Run {
     id: number;
-    startedAt: number; // ms
-    finishedAt?: number; // ms
+    startedAt: TimestampMs;
+    finishedAt?: TimestampMs;
     geoUpdates: GeoUpdate[];
+    events: Event[];
 }
 
 export interface GeoUpdate {
     coords: Coords;
-    timestamp: number; // ms
+    timestamp: TimestampMs;
+}
+
+export interface Event {
+    type: 'pause' | 'resume';
+    time: TimestampMs;
 }
 
 /** Defined as `(longitude, latitude)` as decimal numbers.
@@ -81,9 +89,7 @@ const INTERVALS: { [k: number]: string } = {
     23: 'Night',
 };
 
-type Millis = number;
-
-export const runTitleOf = (startedAt: Millis): string => {
+export const runTitleOf = (startedAt: TimestampMs): string => {
     const hours = new Date(startedAt).getHours();
     let prev: string = 'A nice';
     const suffix = ' run';
@@ -98,3 +104,5 @@ export const runTitleOf = (startedAt: Millis): string => {
 
     return prev + suffix;
 };
+
+export const isPaused = (run: Run) => run.events.at(-1)?.type == 'pause';

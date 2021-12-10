@@ -29,7 +29,7 @@ export const NewRun = ({ onStartRun, onCurrentPosition, onGeolocationError, hasC
             </Suspense>
 
             <button class="btn w-full" disabled={!hasCurrentPosition} onClick={onStartRun}>
-                Start running
+                {hasCurrentPosition ? 'Start running' : 'Getting position…'}
             </button>
         </section>
     );
