@@ -72,6 +72,21 @@ const mkMap = (container: HTMLElement, route?: GeoJSON.Feature<GeoJSON.LineStrin
             });
 
             map.addLayer({
+                id: 'route-shadow',
+                type: 'line',
+                source: 'route',
+                layout: {
+                    'line-join': 'round',
+                    'line-cap': 'round',
+                },
+                paint: {
+                    'line-color': 'hsl(211, 100%, 40%)',
+                    'line-width': 8,
+                    'line-blur': 20,
+                },
+            });
+
+            map.addLayer({
                 id: 'route',
                 type: 'line',
                 source: 'route',
@@ -80,8 +95,8 @@ const mkMap = (container: HTMLElement, route?: GeoJSON.Feature<GeoJSON.LineStrin
                     'line-cap': 'round',
                 },
                 paint: {
-                    'line-color': 'yellow',
-                    'line-width': 5,
+                    'line-color': 'hsl(211, 100%, 50%)',
+                    'line-width': 4,
                 },
             });
         }
