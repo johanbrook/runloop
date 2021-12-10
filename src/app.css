@@ -238,7 +238,7 @@ a:active {
 
 .NavBar {
     background-color: var(--color-bg);
-    font-size: var(--size-3);
+    font-weight: 500;
     position: fixed;
     padding: var(--inset);
     bottom: 0;
@@ -252,6 +252,14 @@ a:active {
 .NavBar ul {
     display: flex;
     justify-content: space-between;
+}
+
+.NavBar a {
+    color: var(--color-text-detail);
+}
+
+.NavBar .current a {
+    color: var(--color-accent);
 }
 
 .NavBar__Float {
