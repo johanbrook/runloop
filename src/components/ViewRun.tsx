@@ -1,9 +1,9 @@
 import { h, lazy, Suspense } from '../deps';
-import { formatDuration, formatRange, formatDate } from '../lib/dates';
-import { distanceOf, formatPace, formatDistance, statsOf } from '../lib/geo';
+import { statsOf } from '../lib/geo';
 import { Run, runTitleOf } from '../model/state';
 import { routes } from '../router';
 import { Link } from './Link';
+import { MapPlaceholder } from './Loading';
 
 const Map = lazy(() => import('./Map'));
 
@@ -38,14 +38,20 @@ export const ViewRun = ({ run, onDelete }: Props) => {
                 </tr>
             </table>
 
-            <p>
-                <button class="btn" onClick={() => onDelete(run)}>
-                    Delete run
-                </button>
-            </p>
-            <Suspense fallback={<p>Loading...</p>}>
+            <Suspense fallback={<MapPlaceholder />}>
                 <Map route={run.geoUpdates.map((u) => u.coords)} />
             </Suspense>
+
+            <button
+                class="btn btn-danger w-full"
+                onClick={() => {
+                    if (confirm('Are you sure?')) {
+                        onDelete(run);
+                    }
+                }}
+            >
+                Delete run
+            </button>
         </article>
     );
 };

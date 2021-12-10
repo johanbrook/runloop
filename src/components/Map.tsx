@@ -8,9 +8,10 @@ Mapbox.accessToken = getConfig('MAPBOX_TOKEN');
 
 interface Props {
     route?: Array<Coords>;
+    height?: number;
 }
 
-const Map = ({ route }: Props) => {
+const Map = ({ route, height = 300 }: Props) => {
     const mapEl = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -35,7 +36,7 @@ const Map = ({ route }: Props) => {
         head.insertAdjacentElement('beforeend', link);
     }, []);
 
-    return <div class="Map" ref={mapEl} style="height: 300px"></div>;
+    return <div class="Map" ref={mapEl} style={{ height }}></div>;
 };
 
 export default Map;

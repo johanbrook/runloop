@@ -3,6 +3,7 @@ import { Coords, Err } from '../model/state';
 import { getCurrentPosition } from '../lib/geo';
 import { Link } from './Link';
 import { routes } from '../router';
+import { MapPlaceholder } from './Loading';
 
 const Map = lazy(() => import('./Map'));
 
@@ -30,15 +31,14 @@ export const NewRun = ({ onStartRun, onCurrentPosition, onGeolocationError, hasC
             </p>
 
             <h1>New run</h1>
-            <p>
-                <button class="btn" disabled={!hasCurrentPosition} onClick={() => onStartRun()}>
-                    Start running
-                </button>
-            </p>
 
-            <Suspense fallback={<p>Loading...</p>}>
+            <Suspense fallback={<MapPlaceholder />}>
                 <Map />
             </Suspense>
+
+            <button class="btn w-full" disabled={!hasCurrentPosition} onClick={onStartRun}>
+                Start running
+            </button>
         </section>
     );
 };
