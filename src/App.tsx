@@ -32,8 +32,9 @@ export const App = ({ route }: Props) => {
     if (state.appState == AppState.Failed) {
         return (
             <section>
-                <h1>Failure</h1>
+                <h1>Error</h1>
                 <p>{state.err?.msg || 'Unknown error'}</p>
+                {state.err?.cause && <pre>{state.err?.cause}</pre>}
             </section>
         );
     }
