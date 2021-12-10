@@ -5,7 +5,8 @@ import { App } from './App';
 import { Router, Navigator } from './router';
 import { fixMobileHeight } from './lib/mobile-height-fix';
 
-const navigator: Navigator = (pathname, replace = false, redirect = false) => {
+const navigator: Navigator = (pathname, { replace, redirect, force }) => {
+    if (!force && location.pathname == pathname) return;
     window.history[replace || redirect ? 'replaceState' : 'pushState'](null, '', pathname);
 };
 

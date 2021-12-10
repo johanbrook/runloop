@@ -28,7 +28,14 @@ interface Router {
 }
 
 export interface Navigator {
-    (pathname: string, replace?: boolean, redirect?: boolean): void;
+    (
+        pathname: string,
+        opts: {
+            replace?: boolean;
+            redirect?: boolean;
+            force?: boolean;
+        }
+    ): void;
 }
 
 type Stop = () => void;
@@ -50,11 +57,11 @@ const mkRouter: RouterFn = (callback, navigator) => {
         },
 
         navigate: (pathname, replace = false) => {
-            navigator(pathname, replace);
+            navigator(pathname, { replace });
         },
 
         redirect: (pathname) => {
-            navigator(pathname, true, true);
+            navigator(pathname, { redirect: true });
         },
     };
 
