@@ -83,6 +83,13 @@ export const App = ({ route }: Props) => {
                                             kind: 'reset',
                                         })
                                     }
+                                    appConf={state.appConf}
+                                    onImport={(conf) =>
+                                        dispatch({
+                                            kind: 'import_app_conf',
+                                            conf,
+                                        })
+                                    }
                                 />
                             );
                     }

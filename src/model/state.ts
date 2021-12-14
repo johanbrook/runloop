@@ -106,3 +106,9 @@ export const runTitleOf = (startedAt: TimestampMs): string => {
 };
 
 export const isPaused = (run: Run) => run.events.at(-1)?.type == 'pause';
+
+export const fileOf = (appConf: AppConf): File => {
+    return new File([JSON.stringify(appConf, null, 4)], 'runloop.json', {
+        type: 'application/json',
+    });
+};

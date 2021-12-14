@@ -29,6 +29,11 @@ interface PauseResumeRun {
     pause: boolean;
 }
 
+interface ImportAppConf {
+    kind: 'import_app_conf';
+    conf: AppConf;
+}
+
 interface Reset {
     kind: 'reset';
 }
@@ -40,6 +45,7 @@ export type Action =
     | SetCurrentPosition
     | DeleteRun
     | PauseResumeRun
+    | ImportAppConf
     | Reset
     | Err;
 
@@ -151,6 +157,12 @@ const reducer: Reducer<State, Action> = (prev, action): State => {
                         events: [...currentRun.events, event],
                     },
                 },
+            };
+
+        case 'import_app_conf':
+            return {
+                ...prev,
+                appConf: action.conf,
             };
 
         case 'reset':
